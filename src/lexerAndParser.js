@@ -2,8 +2,6 @@ const fs = require("fs")
 
 let variables = [
 
-
-
 ]
 
 //the variables are hopeless like a person. Variables can't control themselves they are controlled by us and us are controlled by other people
@@ -19,6 +17,16 @@ const instructions = [
         name: "create",
         process: `variables.push({owner: argument, value: argument})`,
         description: "values are hopeless like us"
+    },
+    {
+        name: "overwrite",
+        process: `
+                const find = variables.find(el => el.owner == argument)
+                if(find !== undefined) {
+                    find.value = argument
+                }
+                `,
+        description: "idk"        
     }
 ]
 
@@ -39,8 +47,11 @@ fs.readFile('main.hl', {
                     const getName = element.substring(0, getIndex).trim().split(" ")
                      const findObject = instructions.find(el => el.name == getName[0])
                      if(findObject !== undefined) {
+                        let arguments = element.slice(getIndex+2).trim().split(" ")
+                        
+
                          let getArgument = element.slice(getIndex+2).trim()
-                         if(findObject.process.includes("owner")) {
+                         if(findObject.process.includes("owner: argument")) {
                              if(getArgument.startsWith('"') && getArgument.endsWith('"')) {
                                  getArgument = getArgument.slice(1)
                                  getArgument = getArgument.substring(0, getArgument.length-1)
@@ -49,6 +60,18 @@ fs.readFile('main.hl', {
                                  getArgument = Number(getArgument)
                              }
                              variables.push({owner: getName[1], value: getArgument})
+                         } else if(findObject.process.includes("const find = variables.find(el => el.owner == argument)")) {
+                            if(getArgument.startsWith('"') && getArgument.endsWith('"')) {
+                                getArgument = getArgument.slice(1)
+                                getArgument = getArgument.substring(0, getArgument.length-1)
+                            }
+                            if(!isNaN(getArgument)) {
+                                getArgument = Number(getArgument)
+                            }
+                            const find = variables.find(el => el.owner == getName[1])
+                            if(find !== undefined) {
+                                find.value = getArgument
+                            }
                          } else {
                             let getProcess = findObject.process.replace("argument", getArgument)
                             try{
@@ -64,7 +87,7 @@ fs.readFile('main.hl', {
                                         } else {
                                            getProcess =  getProcess.replace(getArgument, '"' + findIt.value + '"')
                                         }
-                                        Function("return " + getProcess)()                                        
+                                        Function("return " + getProcess)()          
                                     }
                                 }
                             }
