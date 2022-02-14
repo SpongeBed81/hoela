@@ -1,4 +1,3 @@
-create merhaba => "arkadaş yasaları ezberlemiş bize susmak düşer 🤣"
+create merhaba => ["merhaba", "napcan"]
 cryLoud => merhaba
-overwrite merhaba => "selamlar"
-cryLoud => merhaba
+

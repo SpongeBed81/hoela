@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "fs": "^0.0.1-security"
+    "fs": "^0.0.1-security",
+    "node-eval": "^2.0.0"
   }
 }
